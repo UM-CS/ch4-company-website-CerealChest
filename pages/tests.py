@@ -34,3 +34,25 @@ class AboutpageTests(SimpleTestCase):
     def test_template_content(self):
         response = self.client.get(reverse("about"))
         self.assertContains(response, "<h1>Company About Page</h1>")
+
+class ProductsPageTests(SimpleTestCase):
+
+    def test_products_page_status_code(self):
+        response = self.client.get(reverse("products"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_products_template_used(self):
+        response = self.client.get(reverse("products"))
+        self.assertTemplateUsed(response, "products.html")
+
+    def test_products_in_context(self):
+        response = self.client.get(reverse("products"))
+        self.assertIn("products", response.context)
+        self.assertEqual(len(response.context["products"]), 4)
+
+    def test_products_displayed(self):
+        response = self.client.get(reverse("products"))
+        self.assertContains(response, "Product 1")
+        self.assertContains(response, "Product 2")
+        self.assertContains(response, "Product 3")
+        self.assertContains(response, "Product 4")
